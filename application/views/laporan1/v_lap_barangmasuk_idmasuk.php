@@ -1,0 +1,116 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>LAPORAN DATA BARANG MASUK</title>
+</head>
+<body onload="window.print()">
+<div align="center">
+
+<table style="border-collapse: collapse; width: 60%" border="0">
+<tr><td rowspan="3" align="center" style="width: 90px"><img src="<?php echo base_url().'images/IMG_20181115_084856.jpg'?>" height="64" width="70"></td>
+</tr>
+<tr>
+<td style="font-size:  16pt;  font-weight:  bold;  color: balck;" align="center">PT. WEJE MITRA UTAMA(WMU) PADANG</td>
+</tr>
+<tr>
+<td style="font-size:  15pt;  font-weight:  bold;  color: balck;" align="center">Jl. Prof.Dr.Hamka No.1, Parupuk Tabing, Kec. Koto Tangah, Kota Padang</td>
+</tr>
+
+</table>    
+<hr>
+<tr>
+<span  style="font-size:  14pt;  font-weight:  bold;  color: red;">
+FAKTUR LAPORAN BARANG MASUK </span><br>
+
+<td align="center">
+
+<table style="border-collapse: collapse; width: 90%; font-weight: bold;" border="0">
+				
+</table>
+<br>
+</td>
+</tr>
+<tr>
+<td align="center">		
+<br>
+<table style="border-collapse: collapse; width: 90%;" border="0">
+<?php 
+ foreach ($data->result_array() as $i) 
+    $b=$data->num_rows();
+?>
+
+<tr>
+<td width='150px'>ID MASUK</td>
+
+<td width='5px'>:</td><td><b><?php echo $i['idmasuk'] ?></b></td>
+</tr>                
+<tr>
+<td width='200'>TANGGAL MASUK</td><td>:</td>
+<td><b><?php echo $i['tanggalmasuk'] ?></b></td>
+
+</tr>   
+<table style="border-collapse : collapse; width: 90%;" border="2">
+<tr style="background-color: #d0cbcb">
+        <th style="width: 30px ;" align="center">NO</th>
+      
+       
+        <th style="width: 100px">NAMA BARANG</th>
+		        <th style="width: 100px">TYPE BARANG</th>
+
+        <th style="width: 60px">JUMLAH</th>   
+		
+    </tr>
+</thead>
+<tbody>
+     <?php $no=0;$totsemua=0;foreach ($data->result_array() as $i)
+	 {$no++;     $totsemua = $totsemua + $i['d_jumlah'];?> 
+    <tr align="center">
+        <td style="text-align: center;"><?php echo $no;?></td>
+        
+		       
+        <td><?php echo $i['namabarang'] ?></td>
+		        <td><?php echo $i['typebarang'] ?></td>
+
+        <td><?php echo $i['d_jumlah'] ?></td>
+        
+       
+    </tr>
+    <?php }?>
+	<tr> 
+<th colspan="3" style="text-align:center;">Total</th>      
+  <th style="text-align:center;"><?php echo ($totsemua);?></th>   
+  </tr>  
+</tbody>
+</table>
+<br>
+</td>
+</tr>
+<td>
+<div align="center">
+<table style="border-collapse: collapse; width: 90%; font-weight: bold;" border="0">
+<tr>
+<td width="80%"></td>
+<td width="26%">Padang, <?php echo date('d-m-Y'); ?>
+    </tr>
+    <tr>
+<td width="80%"></td>
+
+        <td width="26%">Adm</td>
+    </tr>
+   
+    <tr>
+    <td><br/><br/><br/><br/></td>
+    </tr>    
+    <tr>
+	<td width="80%"></td>
+
+        <td width="26%">( <?php echo $this->session->userdata('user');?> )</td>
+    </tr>
+    <tr>
+        <td align="center"></td>
+    </tr>
+				</table>
+			</div>
+	</body>
+</html>

@@ -1,0 +1,13 @@
+<?php 
+	class template extends CI_Controller {
+		public function __Construct(){
+			parent :: __Construct();
+
+		}
+		public function index ()
+		{
+			
+		}
+	}
+	?>
+	

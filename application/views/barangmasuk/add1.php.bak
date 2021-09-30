@@ -1,0 +1,219 @@
+<script>
+$(document).ready(function(e) {
+  $('#datatiket').DataTable ();
+
+  $('#tmb').submit(function(e) {
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',               
+            cache:false,
+            data: $(this).serialize(),
+            success: function(msg) {
+                if(msg=='berhasil'){
+                    swal({
+                    title: "Sukses di Simpan",
+                    text: "Data berhasil di simpan...",
+                    timer: 1000,
+                    type : "success",
+                    showConfirmButton: false
+                },
+                    function(){
+                        location.href=('<?php echo site_url('barangmasuk/add1/')?>');
+                    }); 
+                }
+            }
+        });
+            return false;
+    });
+
+  $(document).on('click','td',function(){
+    $(this).find("span[class~='caption']").hide();
+  
+  $(this).find("input[class~='editor']").fadeIn().focus();
+    });
+
+  $('#tambah').click(function(e){
+    var bkodebarang =$('#bkodebarang').val();
+    var bnamabarang =$('#bnamabarang').val()
+   
+    datanya = "&bkodebarang="+bkodebarang+"&bnamabarang="+bnamabarang; 
+    $.ajax({
+      url : "<?php echo site_url('barangmasuk/simpantemp')?>",
+      data: datanya,
+      type:"POST",
+      cache:false,
+      success: function(msg){
+      location.href=('<?php echo site_url('barangmasuk/add1')?>');
+    }
+    })
+  });
+
+    function convertToRupiah(angka){
+      var rupiah = '';
+      var angkarev = angka.toString().split('').reverse().join('');
+      for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
+      return rupiah.split('',rupiah.length-1).reverse().join('');
+    }
+
+    
+
+    
+});
+function ambil(bkodebarang,bnamabarang,bjumlahbarang,bketerangan)
+  {
+    $('#bkodebarang').val(bkodebarang);
+    $('#bnamabarang').val(bnamabarang);
+    
+$('#myModal').modal('hide'); 
+  }
+
+  function update_stok(e,id){
+    if(e.keyCode=='13'){
+      var bjumlahbarang = $(e.target).val();
+      datanya = "&id="+id+"&bjumlahbarang="+bjumlahbarang;
+      $.ajax({    
+        url : '<?php echo site_url('barangmasuk/update')?>',
+        type:'post',
+        data:datanya,
+        cache:false,
+        success: function(){
+          location.href=('<?php echo site_url('barangmasuk/add1')?>');
+        }   
+      });
+    }
+  }
+
+  function cetak(){
+    var idmasuk =document.getElementById('idmasuk').value;
+    newwindow=window.open('<?php echo site_url('barangmasuk/cetakidmasuk/')?>'+"/"+idmasuk,'foobar','height=500,width=400');
+    if(window.focus){newwindow.focus()}
+      return true;
+  }
+</script>
+<style type="text/css">
+.editor{
+  display:none;
+  }
+</style>
+<body>
+  <div class="box-body">
+  <form method="post" action="<?php echo site_url('barangmasuk/simpantransaksi')?>" id="tmb" onSubmit="return cetak();">
+    <div class="box-header">
+    <table>
+      <tr>
+        <td width="120"><b>ID MASUK</b></td><td width="10">:</td>
+        <td style="font-size: 15px"><b><?php echo $idmasuk ?></b>
+        <input type="hidden" name="idmasuk" id="idmasuk" value="<?php echo $idmasuk?>"></td>
+      </tr>
+      <tr>
+        <td><b>TANGGAL MASUK</b></td><td width="10">:</td>
+        <td><input type="date" name="tanggalmasuk" required value="-"></td>
+      </tr>
+    </table>
+    </div>
+
+    <div class="box-body table-responsive">
+    <table class="table table-bordered">
+      <tr>
+        <td width="100">Kode Barang</td>
+        <td width="140"><div class="col-sm-14"><input type="text" class="form-control" readonly name="bkodebarang" id="bkodebarang"></div><?php echo $this->session->flashdata('error');?></td>
+        <td width="50"><button type="button" title="Cari Barang" class="btn btn-success" data-toggle="modal" data-target="#myModal"><span class='glyphicon glyphicon-search'></span></button>
+        </td>
+        <td width="100">Nama Barang</td>
+        <td><input type="text" class="form-control" readonly name="barangnama" id="barangnama"></td>
+        <td width="60">JUMLAH BARANG</td>
+        <td width="140"><div class="col-sm-13"><input type="text" class="form-control" readonly name="jumlahbarang" id="jumlahbarang"></div></td>
+        <td width="60">KETERANGA</td>
+        <td width="100"><div class="col-sm-12"><input type="text" class="form-control" name="keterangan" id="keterangan"></div></td>
+        <td><button type="button" id="tambah" class="btn btn-primary"><span class='glyphicon glyphicon-plus'></span></button></td>
+      </tr>
+    </table>
+    </div>
+
+    <div class="col-xs-12">
+    <div class="box-body table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th width="50" align="center">No</th>
+            <th>Kode Barang</th>
+            <th>Nama Barang</th>
+            <th>jumlah</th>
+            <th width="50">keterangan</th>
+            
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+        <?php $nomor=1;foreach($datatemp->result_array() as $d){
+            
+           ?>
+          <tr>
+            <td align="center"><?php echo $nomor?></td>
+            <td><?php echo $d['bkodebarang']?></td>
+            <td><?php echo $d['bnamabarang'] ?></td>
+            
+            <td align="center" style="cursor:pointer;">
+              <span class="caption"><?php echo $d['jumlahbarang']?></span>
+              <input type="text" onKeyDown="update_stok(event,'<?php echo $d['bkodebarang']?>')" class="form-control editor" value="<?php echo $d['jumlahbarang']?>"/>
+            </td>
+            
+          </tr>
+          <?php $nomor++; } ?>
+          
+         
+          
+          <tr>
+            <td colspan="5">
+              <button type="submit" class="btn btn-primary btn-sm"/><span class='glyphicon glyphicon-floppy-save'></span> Simpan Transaksi</button>
+              <a class='btn btn-danger btn-sm' title='Hapus Data' href='<?php echo site_url('barangmasuk/batal')?>' onclick="return confirm('Anda Yakin menghapus data ini?')"><span class='fa fa-ban'> Batal Transaksi</span></a>
+              <button type="button" onclick="location.href=('<?php echo site_url('barangmasuk')?>')" class="btn btn-success btn-sm"><span class='fa  fa-mail-reply-all'></span> Kembali</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </form>
+  </div>
+</body>
+
+<div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Data Barang</h4>
+          <table class="table table-bordered table-striped table-hover" id="datatiket">
+            <thead>
+              <tr>
+                <th width="5">No</th>
+                <th width="80">Kode Barang</th>
+                <th>Nama Barang</th>
+                <th>jumlah barang</th>
+                <th>keterangan</th>
+                
+              </tr>
+            </thead>         
+            <tbody>
+            <?php $no=1;
+              foreach($databarang->result_array() as $r){ 
+            ?>
+              <tr>
+                <td align="center"><?php echo $no ?></td>
+                <td align="center"><?php echo $r['bkodebarang'] ?></td>
+                <td><?php echo $r['bnamabarang'] ?></td>
+               
+                <td><?php echo $r['jumlahbarang'] ?></td>
+				 <td><?php echo $r['keterangan'] ?></td>
+                <td><button class="btn btn-primary btn-xs" type="button" onClick="return ambil('<?php echo $r['bkodebarang']?>','<?php echo $r['bnamabarang']?>')"><span class='glyphicon glyphicon-check'></span> Pilih</button>
+
+                </td>
+              </tr> 
+              <?php $no++; } ?>       
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>

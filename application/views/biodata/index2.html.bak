@@ -1,0 +1,32 @@
+<html>
+<head>
+<title>MEMBUAT FRAME CURRICULUM</title>
+</head >
+	
+	<frameset rows="15%,*,15%" border="1" >
+		<frame src="atas.html" >
+
+					<frameset cols="15%,*,15%" border="1" >
+					
+						<frame src="kiri.html" >
+						
+
+
+				<frame src=""name ="isi" >
+					
+		
+		
+						<frameset cols="50%,*" border="1" >
+						<frame src="kanan.html">
+						
+						</frameset>
+		
+		
+				</frameset>
+		
+
+				<frame src="bawah.html">
+	</frameset>
+
+
+</html>

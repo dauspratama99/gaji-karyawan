@@ -1,0 +1,15 @@
+<form method="POST" action="<?php echo site_url('laporan/lap_pemasanganperiode')?>" target="_blank"> <table> 
+<div class="form-group">
+												<label class="col-md-3 control-label">Date range</label>
+												<div class="col-md-6">
+													<div class="input-daterange input-group" data-plugin-datepicker>
+														<span class="input-group-addon">
+															<i class="fa fa-calendar"></i>
+														</span>
+														<input type="text" class="form-control" name="start">
+														<span class="input-group-addon">to</span>
+														<input type="text" class="form-control" name="end">
+													</div>
+												</div>
+											</div></form>
+

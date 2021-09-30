@@ -1,0 +1,13 @@
+<html>
+<head>
+<title>KIRI</title>
+</head>
+	<body bgcolor="pink">
+	<center><h1>Bagian Kiri</h1></center>
+	<a href="data.html" target="isi">BIODATA</a>
+
+
+
+	</body>
+
+</html>
